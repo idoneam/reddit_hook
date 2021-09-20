@@ -17,7 +17,7 @@ def main(subr: str, trg_hook: str, log_hook: str, sleep_dur: float):
                 requests.get(
                     f"https://www.reddit.com/r/{subr}/new.json",
                     headers={
-                        "User-Agent": f"{chr(random.randint(33,126))}{''.join(chr(random.randint(32, 126)) for _ in range(15))}"
+                        "User-Agent": fr"{chr(random.randint(33,126))}{''.join(chr(random.randint(32, 126)) for _ in range(15))}"
                     },
                 ).json()["data"]["children"],
             ):
