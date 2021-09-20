@@ -1,15 +1,16 @@
+import operator
+import os
 import random
 import time
-import os
-import operator
-import requests
+import traceback
 from datetime import datetime
+import requests
 
 
 def main(subr: str, trg_hook: str, log_hook: str, sleep_dur: float):
-    try:
-        min_time = datetime.utcnow()
-        while True:
+    min_time = datetime.utcnow()
+    while True:
+        try:
             permalinks = []
             for data in map(
                 operator.itemgetter("data"),
@@ -41,19 +42,18 @@ def main(subr: str, trg_hook: str, log_hook: str, sleep_dur: float):
                 )
             if permalinks:
                 min_time = permalinks[0][1]
+        except Exception:
+            requests.post(
+                log_hook,
+                json={
+                    "content": "LOG: r/{} webhook has crashed\nerror log:```\n{}```".format(
+                        subr, traceback.format_exc().replace("```", "\\`\\`\\`")
+                    ),
+                    "username": f"r/{subr} webhook log",
+                },
+            )
+        finally:
             time.sleep(sleep_dur)
-    except:
-        import traceback
-
-        requests.post(
-            log_hook,
-            json={
-                "content": "LOG: r/{} webhook has crashed\nerror log:```\n{}```".format(
-                    subr, traceback.format_exc().replace("```", "\\`\\`\\`")
-                ),
-                "username": f"r/{subr} webhook log",
-            },
-        )
 
 
 if __name__ == "__main__":
