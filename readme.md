@@ -17,5 +17,22 @@ docker can be used to deploy this webhook by running the following commands (rem
 
 ```sh
 docker build . -t irh:latest
-docker run -e IRH_SUBREDDIT_NAME='' -e IRH_TARGET_WEBHOOK_URL='' -e IRH_LOG_WEBHOOK_URL='' -e IRH_SLEEP_DURATION='' -d irh:latest
+docker run \
+	-e IRH_SUBREDDIT_NAME='' \
+	-e IRH_TARGET_WEBHOOK_URL='' \
+	-e IRH_LOG_WEBHOOK_URL='' \
+	-e IRH_SLEEP_DURATION='' \
+	-d irh:latest
+```
+
+we also provide prebuilt docker images synced to the latest commit of the main branch, which can be used as follows (again, remember to substitute empty placeholders with real values)
+
+```sh
+docker pull ghcr.io/idoneam/reddit_hook:main
+docker run \
+    -e IRH_SUBREDDIT_NAME='' \
+    -e IRH_TARGET_WEBHOOK_URL='' \
+    -e IRH_LOG_WEBHOOK_URL='' \
+    -e IRH_SLEEP_DURATION='' \
+    -d ghcr.io/idoneam/reddit_hook:main
 ```
