@@ -12,14 +12,17 @@ def main(subr: str, trg_hook: str, log_hook: str, sleep_dur: float):
     while True:
         try:
             permalinks = []
+            req = requests.get(
+                f"https://www.reddit.com/r/{subr}/new.json",
+                headers={
+                    "User-Agent": fr"{chr(random.randint(33,126))}{''.join(chr(random.randint(32, 126)) for _ in range(15))}"
+                },
+            )
+            assert (
+                req.status_code == 200
+            ), f"error: request to {req.url} returned {req.status_code}"
             for data in map(
-                operator.itemgetter("data"),
-                requests.get(
-                    f"https://www.reddit.com/r/{subr}/new.json",
-                    headers={
-                        "User-Agent": fr"{chr(random.randint(33,126))}{''.join(chr(random.randint(32, 126)) for _ in range(15))}"
-                    },
-                ).json()["data"]["children"],
+                operator.itemgetter("data"), req.json()["data"]["children"]
             ):
                 post_time = datetime.utcfromtimestamp(data["created_utc"])
                 if post_time <= min_time:
