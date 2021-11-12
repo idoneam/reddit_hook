@@ -54,7 +54,9 @@ def main(subr: str, trg_hook: str, log_hook: str, sleep_dur: float):
             requests.post(
                 log_hook,
                 json={
-                    "content": "```\n{}```".format(subr, traceback.format_exc().replace("```", "\\`\\`\\`")),
+                    "content": "```\n{}```".format(
+                        traceback.format_exc().replace("```", "\\`\\`\\`")
+                    ),
                     "username": f"r/{subr} webhook log",
                 },
             )
