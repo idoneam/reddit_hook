@@ -8,6 +8,13 @@ import requests
 
 
 def main(subr: str, trg_hook: str, log_hook: str, sleep_dur: float):
+    requests.post(
+        log_hook,
+        json={
+            "content": f"r/{subr} webhook started",
+            "username": f"r/{subr} webhook log",
+        },
+    )
     min_time = datetime.utcnow()
     while True:
         try:
@@ -20,7 +27,7 @@ def main(subr: str, trg_hook: str, log_hook: str, sleep_dur: float):
             )
             assert (
                 req.status_code == 200
-            ), f"error: request to {req.url} returned {req.status_code}"
+            ), f"request to {req.url} returned {req.status_code}"
             for data in map(
                 operator.itemgetter("data"), req.json()["data"]["children"]
             ):
@@ -47,8 +54,8 @@ def main(subr: str, trg_hook: str, log_hook: str, sleep_dur: float):
             requests.post(
                 log_hook,
                 json={
-                    "content": "LOG: r/{} webhook has crashed\nerror log:```\n{}```".format(
-                        subr, traceback.format_exc().replace("```", "\\`\\`\\`")
+                    "content": "```\n{}```".format(
+                        traceback.format_exc().replace("```", "\\`\\`\\`")
                     ),
                     "username": f"r/{subr} webhook log",
                 },
