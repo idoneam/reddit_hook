@@ -46,7 +46,7 @@ def main(subr: str, trg_hook: str, log_hook: str, sleep_dur: float):
             for permalink in map(operator.itemgetter(0), reversed(permalinks)):
                 requests.post(
                     trg_hook,
-                    json={"content": f"https://old.reddit.com{permalink}"},
+                    json={"content": f"https://www.reddit.com{permalink}"},
                 )
             if permalinks:
                 min_time = permalinks[0][1]
